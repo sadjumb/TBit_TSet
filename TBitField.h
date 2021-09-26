@@ -3,21 +3,25 @@
 class TBitField
 {
 public:
-	TBitField(size_t);
-	~TBitField();
+	TBitField();
+	TBitField(int);
 	TBitField(const TBitField&);
+	~TBitField();
+	
 	TBitField& operator=(const TBitField&);
-	TBitField operator+(TBitField);
-	TBitField operator~();
-	TBitField operator*(TBitField);
-	void add(size_t index);
-	void del(size_t index);
-	std::string TBitToStr(size_t sizeU);
+	TBitField operator+(const TBitField&) const;
+	TBitField operator*(TBitField) const;
+	TBitField operator~() const;
+
+	void add(int);
+	void del(int);
+	
+	std::string TBitToStr(int sizeU) const;
 
 private:
 	unsigned int* mem;
-	size_t size;
-	int getBit(size_t);
-	int getIndex(size_t);
+	int size;
+	int getBit(int) const;
+	int getIndex(int) const;
 };
 

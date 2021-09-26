@@ -1,119 +1,117 @@
 #include "TBitField.h"
 
-int TBitField::getBit(size_t index)
+TBitField::TBitField()
 {
-    return (index - 1) % (8 * sizeof(int));
+	size = 0;
+	mem = nullptr;
 }
 
-int TBitField::getIndex(size_t index)
+TBitField::TBitField(int _size)
 {
-
-    return (index - 1) / (8 * sizeof(int));
-}
-
-TBitField::TBitField(size_t _size = 0) : size(_size), mem(nullptr)
-{
-    if(size)
-        mem = new unsigned int[size];
-}
-
-TBitField::~TBitField()
-{
-    size = 0;
-    delete[] mem;
-    mem = nullptr;
-
+	size = _size / (8 * sizeof(int) + 1);
+	mem = new unsigned int [size] { 0 };
 }
 
 TBitField::TBitField(const TBitField& copy)
 {
-    size = copy.size;
-    mem = new unsigned int[size];
-    for (size_t i = 0; i < size; ++i)
-    {
-        mem[i] = copy.mem[i];
-    }
+	size = copy.size;
+	mem = new unsigned int[size];
+	for(size_t i = 0; i < size; ++i)
+	{
+		mem[i] = copy.mem[i];
+	}
 }
 
-TBitField& TBitField::operator=(const TBitField& copy)
+TBitField::~TBitField()
 {
-    if (this == &copy)
-    {
-        return *this;
-    }
-    size = copy.size;
-    delete[] mem;
-    mem = new unsigned int[size];
-    for (size_t i = 0; i < size; ++i)
-    {
-        mem[i] = copy.mem[i];
-    }
-    return *this;
+	size = 0;
+	delete[] mem;
 }
 
-TBitField TBitField::operator+(TBitField rightObj)
+TBitField& TBitField::operator=(const TBitField& right)
 {
-    TBitField res(size);
-    for (size_t i = 0; i < size; ++i)
-    {
-        res.mem[i] = mem[i] | rightObj.mem[i];
-    }
-    return res;
+	if(this == &right)
+	{
+		return *this;
+	}
+	delete[] mem;
+	size = right.size;
+	mem = new unsigned int[size];
+	for(size_t i = 0; i < size; ++i)
+	{
+		mem[i] = right.mem[i];
+	}
+	return *this;
 }
 
-TBitField TBitField::operator~()
+TBitField TBitField::operator+(const TBitField& right) const
 {
-    TBitField tmp(*this);
-    for (size_t i = 0; i < size; ++i)
-    {
-        tmp.mem[i] = ~tmp.mem[i];
-    }
-    return tmp;
+	TBitField tmp(size);
+	for (size_t i = 0; i < size; ++i)
+	{
+		tmp.mem[i] = mem[i] | right.mem[i];
+	}
+	return tmp;
 }
 
-TBitField TBitField::operator*(TBitField rightObj)
+TBitField TBitField::operator*(TBitField right) const
 {
-    TBitField res(size);
-    for (size_t i = 0; i < size; ++i)
-    {
-        res.mem[i] = mem[i] & rightObj.mem[i];
-    }
-    return res;
+	TBitField tmp(size);
+	for(size_t i = 0; i < size; ++i)
+	{
+		tmp.mem[i] = mem[i] & right.mem[i];
+	}
+	return tmp;
 }
 
-void TBitField::add(size_t index)
+TBitField TBitField::operator~() const
 {
-    size_t k = getIndex(index);
-    size_t j = getBit(index);
-    mem[k] = mem[k] | (1 << j);
-    return;
+	TBitField tmp(size);
+	for(size_t i = 0; i < size; ++i)
+	{
+		tmp.mem[i] = ~mem[i];
+	}
+	return tmp;
 }
 
-void TBitField::del(size_t index)
+void TBitField::add(int num)
 {
-    size_t k = getIndex(index);
-    size_t j = getBit(index);
-    mem[k] = mem[k] & (~(1 << j));
-    return;
+	int k = getBit(num);
+	int i = getIndex(num);
+	mem[i] = mem[i] | (1 << k);
 }
 
-std::string TBitField::TBitToStr(size_t sizeU)
+void TBitField::del(int num)
 {
-    std::string str{};
-    size_t k = 0;
-    for (size_t i = 0; i < size; ++i)
-    {
-        for (size_t j = 0; j < sizeU; ++j)
-        {
-            if (mem[i] & (1 << j) == 1)
-            {
-                k = i * (sizeof(unsigned int) * 8) + 1 + j;
-                if (k <= sizeU)
-                {
-                    str = str + " " + std::to_string(k);
-                }
-            }
-        }
-    }
-    return str;
+	int k = getBit(num);
+	int i = getIndex(num);
+	mem[i] = mem[i] & ~(1 << k);
+}
+
+std::string TBitField::TBitToStr(int sizeU) const
+{
+	std::string str;
+	int k;
+	for(size_t i = 0; i < size; ++i)
+	{
+		for(size_t j = 0; j < sizeof(unsigned int) * 8; ++j)
+		{
+			if((mem[i] & (1 << j)) > 0)
+			{
+				k = i * sizeof(unsigned int) * 8 + 1 + j;
+				str += std::to_string(k);
+			}
+		}
+	}
+	return str;
+}
+
+int TBitField::getBit(int num) const
+{
+	return (num - 1) % (8 * sizeof(unsigned int));
+}
+
+int TBitField::getIndex(int num) const
+{
+	return (num - 1) / (8 * sizeof(unsigned int));
 }
