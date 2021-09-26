@@ -8,6 +8,16 @@ int main()
 {
     TBitField a(72), b(a), c;
 	c = a;
+	c.add(33);
+	c.add(56);
+	c.add(32);
+	b.add(12);
+	b.add(23);
+	
+	
+	c = c + b;
+	std::cout << c.TBitToStr(72);
+	return 0;
 }
 
 

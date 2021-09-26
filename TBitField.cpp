@@ -26,6 +26,7 @@ TBitField::~TBitField()
 {
 	size = 0;
 	delete[] mem;
+	mem = nullptr;
 }
 
 TBitField& TBitField::operator=(const TBitField& right)
@@ -79,6 +80,7 @@ void TBitField::add(int num)
 	int k = getBit(num);
 	int i = getIndex(num);
 	mem[i] = mem[i] | (1 << k);
+	size += (sizeof(int) * 8);
 }
 
 void TBitField::del(int num)
@@ -86,6 +88,7 @@ void TBitField::del(int num)
 	int k = getBit(num);
 	int i = getIndex(num);
 	mem[i] = mem[i] & ~(1 << k);
+	size -= (sizeof(int) * 8);
 }
 
 std::string TBitField::TBitToStr(int sizeU) const
@@ -99,7 +102,7 @@ std::string TBitField::TBitToStr(int sizeU) const
 			if((mem[i] & (1 << j)) > 0)
 			{
 				k = i * sizeof(unsigned int) * 8 + 1 + j;
-				str += std::to_string(k);
+				str += " " + std::to_string(k);
 			}
 		}
 	}
