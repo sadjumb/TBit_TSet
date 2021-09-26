@@ -9,7 +9,7 @@ public:
 
 
 private:
-	int size;
+	size_t size;
 	TBitField tb;
 };
 
