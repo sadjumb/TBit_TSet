@@ -81,7 +81,6 @@ void TBitField::add(int num)
 	int i = getIndex(num);
 	if(i < size)
 		mem[i] = mem[i] | (1 << k);
-	//size += (sizeof(int) * 8);
 }
 
 void TBitField::del(int num)
@@ -89,7 +88,6 @@ void TBitField::del(int num)
 	const int k = getBit(num);
 	const int i = getIndex(num);
 	mem[i] = mem[i] & (~(1 << k));
-	//size -= (sizeof(int) * 8);
 }
 
 void TBitField::resize(int _size)
@@ -134,7 +132,7 @@ std::string TBitField::TBitToStr(int sizeU) const
 		{
 			if((mem[i] & (1 << j)) > 0)
 			{
-				k = i * sizeof(unsigned int) * 8 + 1 + j;
+				k = i * sizeof(unsigned int) * 8 + j + 1;
 				if(k <= sizeU)
 				{
 					str += std::to_string(k) + " ";
