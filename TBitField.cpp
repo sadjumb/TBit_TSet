@@ -97,7 +97,7 @@ std::string TBitField::TBitToStr(int sizeU) const
 	int k;
 	for(size_t i = 0; i < size; ++i)
 	{
-		for(size_t j = 0; j < sizeof(int) * 8; ++j)
+		for(size_t j = 0; j < sizeof(unsigned int) * 8; ++j)
 		{
 			if((mem[i] & (1 << j)) > 0)
 			{
