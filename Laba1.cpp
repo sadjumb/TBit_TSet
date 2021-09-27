@@ -3,18 +3,23 @@
 
 int main()
 {
-    TBitField a(32), b(a), c;
+    TBitField a(64), b(a), c;
 	c = a;
-	c = c;
+	//c = c;
 
 	//a = ~a;
 	
 	
 	//a.add(250);
 	a.add(1);
+	a.add(5);
+	a.add(5);
+	a.add(6);
 	a.add(32);
 	a.add(36);
-	a.add(65);
+	a.add(63);
+
+	
 	//a.add(1);
 	//a.add(2);
 	//a.add(3);
@@ -23,7 +28,8 @@ int main()
 	//a.add(6);
 	//a.add(10);
 	//a.add(50);
-	std::cout << a.TBitToStr(96) << " Size: " << a.getSize();
+	
+	std::cout << a.TBitToStr(64) << " Size: " << a.getSize();
 	
 	c.add(56);
 	c.add(32);

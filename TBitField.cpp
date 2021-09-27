@@ -79,7 +79,8 @@ void TBitField::add(int num)
 {
 	int k = getBit(num);
 	int i = getIndex(num);
-	mem[i] = mem[i] | (1 << k);
+	if(i < size)
+		mem[i] = mem[i] | (1 << k);
 	//size += (sizeof(int) * 8);
 }
 
