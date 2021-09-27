@@ -134,7 +134,7 @@ std::string TBitField::TBitToStr(int sizeU) const
 		{
 			if((mem[i] & (1 << j)) > 0)
 			{
-				k = i * sizeof(unsigned int) * 8 + 1 + j;
+				k = i * sizeof(unsigned int) * 8 + j + 1;
 				if(k <= sizeU)
 				{
 					str += std::to_string(k) + " ";
