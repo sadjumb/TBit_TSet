@@ -15,13 +15,16 @@ public:
 
 	void add(int);
 	void del(int);
+	void resize(int);
+	int getSize() const;
 	
 	std::string TBitToStr(int sizeU) const;
 
 private:
 	unsigned int* mem;
 	int size;
-	int getBit(int) const;
-	int getIndex(int) const;
+	
+	int getBit(long long int) const;
+	int getIndex(long long int) const;
 };
 

@@ -8,7 +8,7 @@ TBitField::TBitField()
 
 TBitField::TBitField(int _size)
 {
-	size = _size / (8 * sizeof(int) + 1);
+	size = _size / (8 * sizeof(int)) + 1;
 	mem = new unsigned int [size] { 0 };
 }
 
@@ -91,10 +91,42 @@ void TBitField::del(int num)
 	//size -= (sizeof(int) * 8);
 }
 
+void TBitField::resize(int _size)
+{
+	_size = _size / (8 * sizeof(int)) + 1;
+	if (_size == size) return;
+	
+	TBitField tmp = *this;
+	delete[] mem;
+	
+	mem = new unsigned[_size];
+	if(_size < size)
+	{
+		for(size_t i = 0; i < _size; ++i)
+		{
+			mem[i] = tmp.mem[i];
+		}
+		return;
+	}
+	for (size_t i = 0; i < size; ++i)
+	{
+		mem[i] = tmp.mem[i];
+	}
+	for(size_t i = size; i < _size; ++i)
+	{
+		mem[i] = 0;
+	}
+}
+
+int TBitField::getSize() const
+{
+	return size;
+}
+
 std::string TBitField::TBitToStr(int sizeU) const
 {
 	std::string str;
-	int k;
+	int k = 0;
 	for(size_t i = 0; i < size; ++i)
 	{
 		for(size_t j = 0; j < sizeof(unsigned int) * 8; ++j)
@@ -112,12 +144,12 @@ std::string TBitField::TBitToStr(int sizeU) const
 	return str;
 }
 
-int TBitField::getBit(int num) const
+int TBitField::getBit(long long int num) const
 {
 	return (num - 1) % (8 * sizeof(unsigned int));
 }
 
-int TBitField::getIndex(int num) const
+int TBitField::getIndex(long long int num) const
 {
 	return (num - 1) / (8 * sizeof(unsigned int));
 }
