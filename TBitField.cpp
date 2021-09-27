@@ -47,7 +47,7 @@ TBitField& TBitField::operator=(const TBitField& right)
 
 TBitField TBitField::operator+(const TBitField& right) const
 {
-	TBitField tmp(size);
+	TBitField tmp(*this);
 	for (size_t i = 0; i < size; ++i)
 	{
 		tmp.mem[i] = mem[i] | right.mem[i];
@@ -57,7 +57,7 @@ TBitField TBitField::operator+(const TBitField& right) const
 
 TBitField TBitField::operator*(TBitField right) const
 {
-	TBitField tmp(size);
+	TBitField tmp(*this);
 	for(size_t i = 0; i < size; ++i)
 	{
 		tmp.mem[i] = mem[i] & right.mem[i];
@@ -67,7 +67,7 @@ TBitField TBitField::operator*(TBitField right) const
 
 TBitField TBitField::operator~() const
 {
-	TBitField tmp(size);
+	TBitField tmp(*this);
 	for(size_t i = 0; i < size; ++i)
 	{
 		tmp.mem[i] = ~mem[i];
@@ -80,15 +80,15 @@ void TBitField::add(int num)
 	int k = getBit(num);
 	int i = getIndex(num);
 	mem[i] = mem[i] | (1 << k);
-	size += (sizeof(int) * 8);
+	//size += (sizeof(int) * 8);
 }
 
 void TBitField::del(int num)
 {
-	int k = getBit(num);
-	int i = getIndex(num);
-	mem[i] = mem[i] & ~(1 << k);
-	size -= (sizeof(int) * 8);
+	const int k = getBit(num);
+	const int i = getIndex(num);
+	mem[i] = mem[i] & (~(1 << k));
+	//size -= (sizeof(int) * 8);
 }
 
 std::string TBitField::TBitToStr(int sizeU) const
@@ -97,12 +97,15 @@ std::string TBitField::TBitToStr(int sizeU) const
 	int k;
 	for(size_t i = 0; i < size; ++i)
 	{
-		for(size_t j = 0; j < sizeof(unsigned int) * 8; ++j)
+		for(size_t j = 0; j < sizeof(int) * 8; ++j)
 		{
 			if((mem[i] & (1 << j)) > 0)
 			{
 				k = i * sizeof(unsigned int) * 8 + 1 + j;
-				str += " " + std::to_string(k);
+				if(k <= sizeU)
+				{
+					str += std::to_string(k) + " ";
+				}
 			}
 		}
 	}
